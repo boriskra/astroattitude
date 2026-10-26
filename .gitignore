@@ -1,0 +1,12 @@
+.deps/
+build*/
+dist/
+.gradle/
+.swiftpm/
+.build/
+__pycache__/
+*.pyc
+*.egg-info/
+local.properties
+bindings/swift/Artifacts/
+.kotlin/

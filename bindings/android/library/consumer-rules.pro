@@ -1,0 +1,2 @@
+-keep class org.astroattitude.Native { *; }
+-keep class org.astroattitude.NativeFailure { <init>(int, byte[]); }

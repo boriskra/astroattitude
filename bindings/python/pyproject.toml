@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "astroattitude"
+version = "0.1.0"
+requires-python = ">=3.9"
+description = "Typed ctypes interface to the caller-provisioned astroattitude native library"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Astroattitude contributors"}]
+[project.urls]
+Repository = "https://github.com/boriskra/astroattitude"
+Documentation = "https://github.com/boriskra/astroattitude/blob/main/docs/README.md"
+[tool.setuptools.package-data]
+astroattitude = ["native/*", "notices/*"]

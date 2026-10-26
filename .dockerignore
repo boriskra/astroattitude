@@ -1,0 +1,14 @@
+.git
+build*
+dist
+.deps/*.archive
+.deps/*.zip
+.deps/gradle*
+.deps/*keystore
+bindings/android/**/build
+bindings/swift/Artifacts
+**/__pycache__
+**/.gradle
+**/.kotlin
+**/* 2.md
+.deps/

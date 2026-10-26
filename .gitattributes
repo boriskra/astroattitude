@@ -1,0 +1,3 @@
+# Preserve upstream notice bytes; their original whitespace is intentional.
+notices/** -whitespace
+*.bat text eol=crlf

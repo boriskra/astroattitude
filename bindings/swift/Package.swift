@@ -1,0 +1,3 @@
+// swift-tools-version: 5.9
+import PackageDescription
+let package = Package(name: "Astroattitude", platforms: [.macOS(.v13), .iOS(.v16)], products: [.executable(name: "calibration-guide", targets: ["CalibrationGuide"]), .library(name: "Astroattitude", targets: ["Astroattitude"]), .executable(name: "synthetic-example", targets: ["SyntheticExample"])], targets: [.executableTarget(name: "CalibrationGuide", dependencies: ["Astroattitude"]), .binaryTarget(name: "CAstroattitude", path: "Artifacts/CAstroattitude.xcframework"), .target(name: "Astroattitude", dependencies: ["CAstroattitude"], linkerSettings: [.linkedLibrary("c++")]), .executableTarget(name: "SyntheticExample", dependencies: ["Astroattitude"])])

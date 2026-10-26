@@ -1,0 +1,20 @@
+name: Bug report
+description: Report a reproducible problem using synthetic inputs.
+body:
+  - type: markdown
+    attributes:
+      value: "Do not attach real sky images, observation times, location, star lists, sensor logs, calibration coefficients or credentials. Use independent synthetic inputs. For vulnerabilities see SECURITY.md."
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include expected and actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Synthetic reproduction
+      description: Include source revision, platform and minimal reproduction steps. Remove personal paths from logs.
+    validations:
+      required: true

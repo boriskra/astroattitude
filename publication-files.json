@@ -1,0 +1,411 @@
+{
+  "schema": "astroattitude.publication/1",
+  "files": {
+    ".dockerignore": {
+      "purpose": "project metadata"
+    },
+    ".gitattributes": {
+      "purpose": "project metadata"
+    },
+    ".github/ISSUE_TEMPLATE/bug_report.yml": {
+      "purpose": "public contribution and CI workflow"
+    },
+    ".github/ISSUE_TEMPLATE/config.yml": {
+      "purpose": "public contribution and CI workflow"
+    },
+    ".github/pull_request_template.md": {
+      "purpose": "public contribution and CI workflow"
+    },
+    ".github/workflows/ci.yml": {
+      "purpose": "public contribution and CI workflow"
+    },
+    ".gitignore": {
+      "purpose": "project metadata"
+    },
+    "AGENTS.md": {
+      "purpose": "project metadata"
+    },
+    "CMakeLists.txt": {
+      "purpose": "project metadata"
+    },
+    "CONTRIBUTING.md": {
+      "purpose": "project metadata"
+    },
+    "LICENSE": {
+      "purpose": "project metadata"
+    },
+    "README.md": {
+      "purpose": "project metadata"
+    },
+    "SECURITY.md": {
+      "purpose": "project metadata"
+    },
+    "bindings/android/build.gradle.kts": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/example/build.gradle.kts": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/example/gradle.lockfile": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/example/src/main/AndroidManifest.xml": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/example/src/main/kotlin/org/astroattitude/example/CalibrationGuide.kt": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/example/src/main/kotlin/org/astroattitude/example/MainActivity.kt": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/gradle.properties": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/gradle/wrapper/gradle-wrapper.jar": {
+      "purpose": "language interface and standalone synthetic example",
+      "binary_sha256": "81a82aaea5abcc8ff68b3dfcb58b3c3c429378efd98e7433460610fecd7ae45f"
+    },
+    "bindings/android/gradle/wrapper/gradle-wrapper.properties": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/gradlew": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/gradlew.bat": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/library/build.gradle.kts": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/library/consumer-rules.pro": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/library/gradle.lockfile": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/library/src/androidTest/kotlin/org/astroattitude/ConformanceTest.kt": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/library/src/androidTest/kotlin/org/astroattitude/WorkflowTest.kt": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/library/src/main/AndroidManifest.xml": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/library/src/main/kotlin/org/astroattitude/Engine.kt": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/library/src/main/kotlin/org/astroattitude/Models.kt": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/library/src/main/kotlin/org/astroattitude/Workflow.kt": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/native/bridge.cpp": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/native/exports.map": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/android/settings.gradle.kts": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/python/LICENSE": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/python/astroattitude/__init__.py": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/python/astroattitude/models.py": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/python/astroattitude/workflow.py": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/python/pyproject.toml": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/schema/models.json": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/swift/Package.swift": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/swift/Sources/Astroattitude/Engine.swift": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/swift/Sources/Astroattitude/Models.swift": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/swift/Sources/Astroattitude/Workflow.swift": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/swift/Sources/CalibrationGuide/main.swift": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "bindings/swift/Sources/SyntheticExample/main.swift": {
+      "purpose": "language interface and standalone synthetic example"
+    },
+    "cmake/astroattitudeConfig.cmake.in": {
+      "purpose": "build and pinned dependencies"
+    },
+    "cmake/dependencies.json": {
+      "purpose": "build and pinned dependencies"
+    },
+    "diagnostics/attitude_consistency.py": {
+      "purpose": "generic optional diagnostics"
+    },
+    "diagnostics/benchmark.cpp": {
+      "purpose": "generic optional diagnostics"
+    },
+    "diagnostics/calibration.py": {
+      "purpose": "generic optional diagnostics"
+    },
+    "diagnostics/dng_geometry.py": {
+      "purpose": "generic optional diagnostics"
+    },
+    "diagnostics/exposure_fusion.py": {
+      "purpose": "generic optional diagnostics"
+    },
+    "diagnostics/night_catalog.py": {
+      "purpose": "generic optional diagnostics"
+    },
+    "diagnostics/sky_inputs.py": {
+      "purpose": "generic optional diagnostics"
+    },
+    "docs/API.md": {
+      "purpose": "public documentation"
+    },
+    "docs/ARCHITECTURE.md": {
+      "purpose": "public documentation"
+    },
+    "docs/ASTROPHOTOGRAPHY.md": {
+      "purpose": "public documentation"
+    },
+    "docs/BUILD.md": {
+      "purpose": "public documentation"
+    },
+    "docs/CALIBRATION_DIAGNOSTICS.md": {
+      "purpose": "public documentation"
+    },
+    "docs/CALIBRATION_WORKFLOW.md": {
+      "purpose": "public documentation"
+    },
+    "docs/C_ABI.md": {
+      "purpose": "public documentation"
+    },
+    "docs/PUBLICATION.md": {
+      "purpose": "public documentation"
+    },
+    "docs/README.md": {
+      "purpose": "public documentation"
+    },
+    "docs/RECORDED_REPLAY.md": {
+      "purpose": "public documentation"
+    },
+    "docs/RESOURCES.md": {
+      "purpose": "public documentation"
+    },
+    "docs/RIG_FUSION.md": {
+      "purpose": "public documentation"
+    },
+    "docs/STAR_EXTRACTION.md": {
+      "purpose": "public documentation"
+    },
+    "docs/VALIDATION.md": {
+      "purpose": "public documentation"
+    },
+    "examples/c_calibration.c": {
+      "purpose": "synthetic guided example"
+    },
+    "examples/c_synthetic.c": {
+      "purpose": "synthetic guided example"
+    },
+    "examples/cpp_calibration.cpp": {
+      "purpose": "synthetic guided example"
+    },
+    "examples/cpp_synthetic.cpp": {
+      "purpose": "synthetic guided example"
+    },
+    "examples/python_calibration.py": {
+      "purpose": "synthetic guided example"
+    },
+    "examples/python_synthetic.py": {
+      "purpose": "synthetic guided example"
+    },
+    "include/astroattitude/astroattitude.h": {
+      "purpose": "public interface"
+    },
+    "include/astroattitude/astroattitude.hpp": {
+      "purpose": "public interface"
+    },
+    "include/astroattitude/calibration.hpp": {
+      "purpose": "public interface"
+    },
+    "include/astroattitude/extraction.hpp": {
+      "purpose": "public interface"
+    },
+    "notices/ERFA-LICENSE.txt": {
+      "purpose": "required third-party attribution"
+    },
+    "notices/Eigen-BSD.txt": {
+      "purpose": "required third-party attribution"
+    },
+    "notices/Eigen-MPL2.txt": {
+      "purpose": "required third-party attribution"
+    },
+    "notices/Gradle-Apache2.txt": {
+      "purpose": "required third-party attribution"
+    },
+    "notices/Gradle-NOTICE.txt": {
+      "purpose": "required third-party attribution"
+    },
+    "notices/INCLUDED_COPYRIGHTS.txt": {
+      "purpose": "required third-party attribution"
+    },
+    "notices/INCLUDED_FILES.json": {
+      "purpose": "required third-party attribution"
+    },
+    "notices/JSON-MIT.txt": {
+      "purpose": "required third-party attribution"
+    },
+    "notices/PicoSHA2-MIT.txt": {
+      "purpose": "required third-party attribution"
+    },
+    "notices/README.md": {
+      "purpose": "required third-party attribution"
+    },
+    "src/astrometry.cpp": {
+      "purpose": "native implementation"
+    },
+    "src/c_api.cpp": {
+      "purpose": "native implementation"
+    },
+    "src/calibration.cpp": {
+      "purpose": "native implementation"
+    },
+    "src/extraction.cpp": {
+      "purpose": "native implementation"
+    },
+    "src/internal.hpp": {
+      "purpose": "native implementation"
+    },
+    "src/resources.cpp": {
+      "purpose": "native implementation"
+    },
+    "src/solver.cpp": {
+      "purpose": "native implementation"
+    },
+    "src/workflow_json.hpp": {
+      "purpose": "native implementation"
+    },
+    "tests/allocation_probe.cpp": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/platform/Dockerfile": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/synthetic_sky.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_allocation.cpp": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_attitude_consistency.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_calibration.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_converters.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_core.cpp": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_dng_geometry.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_exposure_fusion.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_extraction.cpp": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_night_catalog.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_publication.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_python.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_replay.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_sky_inputs.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_workflow.cpp": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_workflow_parity.cpp": {
+      "purpose": "independent synthetic controls"
+    },
+    "tests/test_workflow_python.py": {
+      "purpose": "independent synthetic controls"
+    },
+    "tools/audit_included_files.py": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/build_android.sh": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/build_apple.sh": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/check_publication.py": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/convert.py": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/fetch_dependencies.py": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/generate_models.py": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/package_python.py": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/propagate.cpp": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/replay_calibration.py": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/validate_native_package.py": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/verify_android.py": {
+      "purpose": "portable build/conversion/replay tooling"
+    },
+    "tools/test_ios_simulator.py": {
+      "purpose": "temporary iOS simulator synthetic parity check"
+    }
+  },
+  "synthetic_provenance": {
+    "captured_inputs": false,
+    "generators": [
+      "tests/synthetic_sky.py",
+      "tests/test_core.cpp",
+      "tests/test_extraction.cpp",
+      "tests/test_workflow.cpp",
+      "tests/test_replay.py"
+    ],
+    "sensor_seed": 1729,
+    "method": "algebraic controls and deterministic generated pixels; no captured inputs"
+  }
+}

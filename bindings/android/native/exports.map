@@ -1,0 +1,1 @@
+{ global: Java_org_astroattitude_Native_*; local: *; };

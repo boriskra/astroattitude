@@ -1,0 +1,90 @@
+name: Synthetic controls
+on: [push, pull_request]
+permissions:
+  contents: read
+env:
+  CMAKE_BUILD_PARALLEL_LEVEL: '12'
+  CTEST_PARALLEL_LEVEL: '12'
+  OPENBLAS_NUM_THREADS: '12'
+  OMP_NUM_THREADS: '12'
+  PYTHONDONTWRITEBYTECODE: '1'
+  PYTHONPATH: bindings/python
+jobs:
+  native:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: python3 tools/check_publication.py
+      - run: python3 tests/test_publication.py
+      - run: python3 tools/fetch_dependencies.py
+      - run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DAA_BUILD_EXAMPLES=ON
+      - run: cmake --build build -j12
+      - run: ctest --test-dir build --output-on-failure -j12
+      - run: python3 tests/test_converters.py
+      - run: ./build/aa_cpp_example build/fixtures/catalog.json build/fixtures/astrometry.json build/fixtures/rays.json
+      - run: python3 tests/test_python.py build/libastroattitude_c.${{ runner.os == 'macOS' && 'dylib' || 'so' }} build/fixtures
+      - if: runner.os == 'macOS'
+        run: |
+          sh tools/build_apple.sh
+          swift run --package-path bindings/swift -j 12 synthetic-example "$PWD/build/fixtures"
+          swift run --package-path bindings/swift -j 12 calibration-guide "$PWD/build/fixtures/catalog.json" "$PWD/build/fixtures/astrometry.json" "$PWD/build/fixtures/workflow-training.json"
+          python3 tools/test_ios_simulator.py
+  sanitizers:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - run: python3 tools/fetch_dependencies.py
+      - run: cmake -S . -B build-san -G Ninja -DAA_SANITIZE=ON -DCMAKE_BUILD_TYPE=Debug
+      - run: cmake --build build-san -j12
+      - run: ctest --test-dir build-san --output-on-failure -j12
+  android:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;27.0.12077973'
+      - run: python3 tools/fetch_dependencies.py
+      - run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j12
+          ctest --test-dir build --output-on-failure -j12
+          sh tools/build_android.sh
+      - working-directory: bindings/android
+        run: ./gradlew --max-workers=12 :library:assembleRelease :library:assembleDebugAndroidTest :example:assembleRelease
+      - run: python3 tools/verify_android.py "$ANDROID_HOME"
+      - uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
+        with:
+          api-level: 36
+          arch: x86_64
+          target: google_apis
+          cores: 12
+          working-directory: bindings/android
+          script: ./gradlew --max-workers=12 :library:connectedDebugAndroidTest
+  secrets:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scan source history locally with pinned Gitleaks
+        run: |
+          curl --fail --silent --show-error --location https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz -o "$RUNNER_TEMP/gitleaks.tar.gz"
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  $RUNNER_TEMP/gitleaks.tar.gz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/gitleaks.tar.gz" -C "$RUNNER_TEMP" gitleaks
+          "$RUNNER_TEMP/gitleaks" git . --redact=100

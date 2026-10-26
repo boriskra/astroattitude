@@ -37,6 +37,11 @@ jobs:
           swift run --package-path bindings/swift -j 12 synthetic-example "$PWD/build/fixtures"
           swift run --package-path bindings/swift -j 12 calibration-guide "$PWD/build/fixtures/catalog.json" "$PWD/build/fixtures/astrometry.json" "$PWD/build/fixtures/workflow-training.json"
           python3 tools/test_ios_simulator.py
+          python3 examples/ios-alignment/prepare.py
+          python3 examples/ios-alignment/generate_target.py
+          git diff --exit-code -- examples/ios-alignment/target.svg
+          python3 examples/ios-alignment/generate_scene.py
+          python3 examples/ios-alignment/test_simulator.py
   sanitizers:
     runs-on: ubuntu-24.04
     steps:

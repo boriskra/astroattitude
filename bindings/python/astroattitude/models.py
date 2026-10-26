@@ -3,6 +3,20 @@ from typing import List, Optional
 
 from enum import Enum
 
+class AlignmentStatus(str, Enum):
+    estimated = "estimated"
+    tilt_only = "tilt_only"
+    gravity_reference_unavailable = "gravity_reference_unavailable"
+    motion_evidence_unavailable = "motion_evidence_unavailable"
+    motion_detected = "motion_detected"
+    insufficient_frames = "insufficient_frames"
+    optical_configuration_changed = "optical_configuration_changed"
+    inconsistent_frames = "inconsistent_frames"
+    rotation_estimated = "rotation_estimated"
+    pose_diversity_insufficient = "pose_diversity_insufficient"
+    ambiguous_alignment = "ambiguous_alignment"
+    fit_inconsistent = "fit_inconsistent"
+
 class ErrorCode(str, Enum):
     InvalidInput = "InvalidInput"
     InvalidResource = "InvalidResource"
@@ -460,3 +474,83 @@ class CalibrationPackage:
     astrometry_content_id: str
     qualification: str
     physical_accuracy_qualified: bool
+
+@dataclass(frozen=True)
+class AlignmentFrame:
+    frame_id: str
+    camera_id: str
+    reference_id: str
+    optical_provenance: str
+    start_s: float
+    end_s: float
+    R_reference_from_camera: Rotation3
+    R_camera_from_accelerometer_nominal: Rotation3
+
+@dataclass(frozen=True)
+class AlignmentImu:
+    start_s: float
+    end_s: float
+    down_accelerometer: Vec3
+    stationary: bool
+
+@dataclass(frozen=True)
+class AlignmentRequest:
+    reference_id: str
+    clock_id: str
+    cameras: List[str]
+    frames: List[AlignmentFrame]
+    imu: Optional[AlignmentImu]
+    down_reference: Optional[Vec3]
+    minimum_frames: int
+    motion_detected: bool
+
+@dataclass(frozen=True)
+class AlignmentPair:
+    from_sensor: str
+    to_sensor: str
+    status: AlignmentStatus
+    from_frames: int
+    to_frames: int
+    pose_count: int
+    misalignment_vector_rad: Optional[Vec3]
+    maximum_gravity_residual_rad: Optional[float]
+    geometry_ratio: Optional[float]
+    R_to_from: Optional[Rotation3]
+    rotation_vector_rad: Optional[Vec3]
+    gravity_mismatch_rad: Optional[float]
+    maximum_repeatability_rad: Optional[float]
+    limitations: List[str]
+
+@dataclass(frozen=True)
+class RigAlignmentRequest:
+    poses: List[AlignmentRequest]
+
+@dataclass(frozen=True)
+class AlignmentReport:
+    pairs: List[AlignmentPair]
+    physical_accuracy_qualified: bool
+
+@dataclass(frozen=True)
+class TargetCorner:
+    id: int
+    target_m: Vec2
+    pixel: Vec2
+
+@dataclass(frozen=True)
+class PlanarPoseRequest:
+    width: int
+    height: int
+    fx_px: float
+    fy_px: float
+    cx_px: float
+    cy_px: float
+    corners: List[TargetCorner]
+    maximum_rms_px: float
+    ambiguity_tolerance_px: float
+
+@dataclass(frozen=True)
+class PlanarPose:
+    R_camera_from_target: Rotation3
+    translation_camera_m: Vec3
+    rms_px: float
+    corners: int

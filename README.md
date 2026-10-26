@@ -16,6 +16,8 @@ Geographic location is an input; the library does not estimate your GPS position
   pixels, with source diagnostics and optional pixel masks.
 - **Calibration workflows:** guided collection stages, forward Brown optical models,
   immutable validation plans and explicit incomplete-evidence reports.
+- **Alignment measurements:** compare cameras in a common frame, with explicit
+  gravity observability. Try the [iOS alignment app](examples/ios-alignment/README.md).
 - **Portable integration:** one native implementation, explicit ownership and
   cancellation, with no camera access or runtime network requests.
 

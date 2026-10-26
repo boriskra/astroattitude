@@ -38,6 +38,7 @@ sealed interface SolveOutcome {
 }
 @Serializable private data class Response(val schema: String, val outcome: String, val solution: AttitudeSolution? = null, val error: SolverError? = null)
 internal object Native {
+    external fun alignment(request: ByteArray, target: Int, cancel: Long): ByteArray
     init { System.loadLibrary("astroattitude_jni") }
     external fun create(catalog: ByteArray, astrometry: ByteArray): Long
     external fun solve(engine: Long, request: ByteArray, token: Long): ByteArray

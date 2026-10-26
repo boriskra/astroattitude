@@ -120,3 +120,28 @@ class CalibrationSession(_Handle):
     def pause(self):return CalibrationStage(self._call('pause'))
     def resume(self):return CalibrationStage(self._call('resume'))
     def end(self):return CalibrationStage(self._call('end'))
+
+
+def _alignment_call(native, value, schema, function, result_type, cancel):
+    request=json.dumps({'schema':schema,'value':_wire(value)},allow_nan=False).encode()
+    if len(request)>6*1048576:raise ValueError('Alignment request budget')
+    fn=getattr(native.lib,function)
+    fn.restype=C.c_int32;fn.argtypes=[C.c_char_p,C.c_uint64,C.c_void_p,C.POINTER(C.c_void_p)]
+    out=C.c_void_p()
+    if cancel is None:status=fn(request,len(request),None,C.byref(out))
+    else:
+        if cancel._native is not native:raise ValueError("Token belongs to another native library")
+        with cancel._lease() as token:status=fn(request,len(request),token,C.byref(out))
+    return decode(result_type,_response(native,status,out))
+
+
+def measure_alignment(native, request: AlignmentRequest, cancel=None):
+    return _alignment_call(native,request,'astroattitude.alignment/1','aa_alignment_measure_v1',AlignmentReport,cancel)
+
+
+def solve_planar_target(native, request: PlanarPoseRequest, cancel=None):
+    return _alignment_call(native,request,'astroattitude.planar-pose/1','aa_planar_pose_v1',PlanarPose,cancel)
+
+
+def calibrate_rig_alignment(native, request: RigAlignmentRequest, cancel=None):
+    return _alignment_call(native,request,'astroattitude.rig-alignment/1','aa_rig_alignment_v1',AlignmentReport,cancel)

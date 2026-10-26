@@ -83,6 +83,9 @@
     "bindings/android/library/gradle.lockfile": {
       "purpose": "language interface and standalone synthetic example"
     },
+    "bindings/android/library/src/androidTest/kotlin/org/astroattitude/AlignmentTest.kt": {
+      "purpose": "independent synthetic alignment regression controls"
+    },
     "bindings/android/library/src/androidTest/kotlin/org/astroattitude/ConformanceTest.kt": {
       "purpose": "language interface and standalone synthetic example"
     },
@@ -173,6 +176,9 @@
     "diagnostics/sky_inputs.py": {
       "purpose": "generic optional diagnostics"
     },
+    "docs/ALIGNMENT.md": {
+      "purpose": "public API and example guide"
+    },
     "docs/API.md": {
       "purpose": "public documentation"
     },
@@ -227,11 +233,88 @@
     "examples/cpp_synthetic.cpp": {
       "purpose": "synthetic guided example"
     },
+    "examples/ios-alignment/Adapter/APRILTAG-LICENSE.txt": {
+      "purpose": "AprilTag BSD-2-Clause attribution"
+    },
+    "examples/ios-alignment/Adapter/AlignmentAdapter.c": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/Adapter/AlignmentAdapter.h": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/Adapter/CMakeLists.txt": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/Adapter/Package.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/Alignment.xcodeproj/project.pbxproj": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/Alignment.xcodeproj/xcshareddata/xcschemes/AlignmentDemo.xcscheme": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/App/AlignmentApp.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/App/AlignmentModel.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/App/CaptureRig.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/App/MeasurementProcessor.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/App/MotionRecorder.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/App/ReferenceData.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/App/SessionPolicy.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/App/SyntheticScenes.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/App/Tone.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/README.md": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/Tests/FlowTests.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/Tests/SessionTests.swift": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/generate_scene.py": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/generate_target.py": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/prepare.py": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
+    "examples/ios-alignment/target.svg": {
+      "purpose": "independently generated AprilTag board; upstream BSD attribution retained",
+      "generated_sha256": "166f1d11f200a055b20e2fb9dcf1a875cfe22254b432f938cae34e8d22648403",
+      "generator": "examples/ios-alignment/generate_target.py"
+    },
+    "examples/ios-alignment/test_simulator.py": {
+      "purpose": "iOS alignment example source and synthetic controls"
+    },
     "examples/python_calibration.py": {
       "purpose": "synthetic guided example"
     },
     "examples/python_synthetic.py": {
       "purpose": "synthetic guided example"
+    },
+    "include/astroattitude/alignment.hpp": {
+      "purpose": "portable alignment API implementation"
     },
     "include/astroattitude/astroattitude.h": {
       "purpose": "public interface"
@@ -275,6 +358,12 @@
     "notices/README.md": {
       "purpose": "required third-party attribution"
     },
+    "src/alignment.cpp": {
+      "purpose": "portable alignment API implementation"
+    },
+    "src/alignment_json.hpp": {
+      "purpose": "portable alignment API implementation"
+    },
     "src/astrometry.cpp": {
       "purpose": "native implementation"
     },
@@ -307,6 +396,12 @@
     },
     "tests/synthetic_sky.py": {
       "purpose": "independent synthetic controls"
+    },
+    "tests/test_alignment.cpp": {
+      "purpose": "independent synthetic alignment regression controls"
+    },
+    "tests/test_alignment_python.py": {
+      "purpose": "independent synthetic alignment regression controls"
     },
     "tests/test_allocation.cpp": {
       "purpose": "independent synthetic controls"
@@ -386,14 +481,14 @@
     "tools/replay_calibration.py": {
       "purpose": "portable build/conversion/replay tooling"
     },
+    "tools/test_ios_simulator.py": {
+      "purpose": "temporary iOS simulator synthetic parity check"
+    },
     "tools/validate_native_package.py": {
       "purpose": "portable build/conversion/replay tooling"
     },
     "tools/verify_android.py": {
       "purpose": "portable build/conversion/replay tooling"
-    },
-    "tools/test_ios_simulator.py": {
-      "purpose": "temporary iOS simulator synthetic parity check"
     }
   },
   "synthetic_provenance": {
@@ -403,7 +498,11 @@
       "tests/test_core.cpp",
       "tests/test_extraction.cpp",
       "tests/test_workflow.cpp",
-      "tests/test_replay.py"
+      "tests/test_replay.py",
+      "tests/test_alignment.cpp",
+      "examples/ios-alignment/generate_target.py",
+      "examples/ios-alignment/generate_scene.py",
+      "examples/ios-alignment/App/SyntheticScenes.swift"
     ],
     "sensor_seed": 1729,
     "method": "algebraic controls and deterministic generated pixels; no captured inputs"

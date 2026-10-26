@@ -71,12 +71,21 @@ jobs:
       - working-directory: bindings/android
         run: ./gradlew --max-workers=12 :library:assembleRelease :library:assembleDebugAndroidTest :example:assembleRelease
       - run: python3 tools/verify_android.py "$ANDROID_HOME"
+      - name: Enable hardware acceleration on the ephemeral runner
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          test -r /dev/kvm && test -w /dev/kvm
       - uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
+        timeout-minutes: 20
         with:
           api-level: 36
           arch: x86_64
           target: google_apis
-          cores: 12
+          # Guest hardware limit; host build and test workers remain at 12.
+          cores: 6
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -accel on -camera-back none -camera-front none
           working-directory: bindings/android
           script: ./gradlew --max-workers=12 :library:connectedDebugAndroidTest
   secrets:

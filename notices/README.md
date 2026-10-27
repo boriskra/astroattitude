@@ -23,3 +23,8 @@ platform toolchain components and are not copied into the library's source bundl
 No Hipparcos, IERS/USNO EOP, leap list or bulletin asset is distributed here.
 Synthetic fixtures are test-generated. Their public source-URI strings are labels,
 not network requests or approval of real-data rights. See [resource provisioning](../docs/RESOURCES.md).
+
+The optional [iOS alignment example](../examples/ios-alignment/README.md) alone
+uses AprilTag 3.4.5 (BSD-2-Clause). Its adapter fetch script pins the archive hash;
+its [license](../examples/ios-alignment/Adapter/APRILTAG-LICENSE.txt) also accompanies
+the generated family-derived printable target. It is not linked into the core.

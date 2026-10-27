@@ -24,6 +24,9 @@ def main():
     (app/'Info.plist').write_bytes(plistlib.dumps({'CFBundleIdentifier':bundle,'CFBundleExecutable':'Synthetic','CFBundleName':'Synthetic','CFBundlePackageType':'APPL','CFBundleVersion':'1','CFBundleShortVersionString':'1.0','MinimumOSVersion':'16.0','CFBundleSupportedPlatforms':['iPhoneSimulator']}))
     run('xcrun','swiftc',*common,'-I',str(work),'-L',str(work),'-lAstroattitude',str(ROOT/'bindings/swift/Sources/SyntheticExample/main.swift'),str(ROOT/'build-simulator/libCAstroattitude.a'),'-lc++','-o',str(app/'Synthetic'))
     shutil.copytree(ROOT/'build/fixtures',app/'fixtures',dirs_exist_ok=True)
+    # Only this generated bundle: Finder metadata copied from fixtures can
+    # make ad-hoc signing fail on a developer checkout.
+    run('xattr','-cr',str(app))
     run('codesign','--force','--sign','-',str(app))
     identifier=call('xcrun','simctl','create','Astroattitude synthetic '+uuid.uuid4().hex[:8],device['deviceTypeIdentifier'],runtime['identifier'])
     try:

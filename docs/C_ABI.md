@@ -189,3 +189,9 @@ no active calls. Python/Swift/Kotlin wrappers implement call leases, serializati
 cancellation and explicit close. Their generated value models share one schema;
 all extraction, association and fitting remain native. Diagnostic candidate data
 and saved journals do not constitute validated export.
+
+## Experimental alignment example
+
+See [alignment measurements](ALIGNMENT.md) for the additive native API, binding
+entry points and observability limits. The [iOS app](../examples/ios-alignment/README.md)
+includes source-build instructions, a printable target and synthetic simulator tests.

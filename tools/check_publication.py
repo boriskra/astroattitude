@@ -49,6 +49,8 @@ def check(root=ROOT):
             if name!='bindings/android/gradle/wrapper/gradle-wrapper.jar':errors.append((name,'unapproved binary path'))
             if hashlib.sha256(data).hexdigest()!=entry['binary_sha256']:errors.append((name,'binary hash changed'))
             continue
+        if p.suffix.lower()=='.svg':
+            if name!='examples/ios-alignment/target.svg' or entry.get('generator') not in entries or entry.get('generated_sha256')!=hashlib.sha256(data).hexdigest():errors.append((name,'unapproved or changed generated target'))
         if p.suffix.lower() in MEDIA:errors.append((name,'unapproved media/archive/binary'))
         try:text=data.decode('utf-8')
         except UnicodeDecodeError:errors.append((name,'unapproved non-text data'));continue

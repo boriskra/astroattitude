@@ -39,7 +39,7 @@ inline void workflow_validate(const WorkflowJson &j) {
                                                 "maximum_blocks",
                                                 "remaining_manual_moves",
                                                 "minimum_inliers",
-                                                "minimum_frames_per_block"};
+                                                "minimum_frames_per_block", "minimum_frames"};
       static const std::set<std::string> counts = {
           "maximum_pixels",     "maximum_workspace_bytes",
           "maximum_work_units", "maximum_memory_bytes",

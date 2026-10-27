@@ -13,6 +13,7 @@
 - [Local replay](RECORDED_REPLAY.md): caller-owned recordings and immutable experiments.
 - [Calibration diagnostics](CALIBRATION_DIAGNOSTICS.md): observability and uncertainty.
 - [Exposure diagnostics](ASTROPHOTOGRAPHY.md): linear samples and fusion limits.
+- [Camera alignment](ALIGNMENT.md): native measurements and a two-mode iOS app.
 - [Rig fusion design](RIG_FUSION.md): application-level multi-sensor considerations.
 
 ## Reference

@@ -223,4 +223,32 @@ JNIEXPORT void JNICALL Java_org_astroattitude_Native_artifactDestroy(JNIEnv *,
   aa_calibration_artifact_destroy_v1(
       reinterpret_cast<aa_calibration_artifact *>(p));
 }
+JNIEXPORT jbyteArray JNICALL Java_org_astroattitude_Native_alignment(
+    JNIEnv *env, jobject, jbyteArray request, jint target, jlong token) {
+  jbyteArray result = nullptr;
+  guarded(env, [&]() -> jlong {
+    auto j = bytes(env, request, target == 1 ? 65536 : 6 * 1048576);
+    if (env->ExceptionCheck())
+      return 0;
+    aa_message *out = nullptr;
+    auto status =
+        target == 2
+            ? aa_rig_alignment_v1(j.data(), j.size(),
+                                  reinterpret_cast<aa_cancel *>(token), &out)
+        : target == 1
+            ? aa_planar_pose_v1(j.data(), j.size(),
+                                reinterpret_cast<aa_cancel *>(token), &out)
+            : aa_alignment_measure_v1(j.data(), j.size(),
+                                      reinterpret_cast<aa_cancel *>(token),
+                                      &out);
+    Message holder(out, aa_message_destroy_v1);
+    if (status) {
+      failure(env, status, out);
+      return 0;
+    }
+    result = message(env, out);
+    return 0;
+  });
+  return result;
+}
 }

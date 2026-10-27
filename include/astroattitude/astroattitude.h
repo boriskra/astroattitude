@@ -52,6 +52,15 @@ AA_PUBLIC int32_t aa_calibration_call_v1(aa_calibration_session *session,
 AA_PUBLIC void aa_calibration_destroy_v1(aa_calibration_session *session);
 AA_PUBLIC void aa_calibration_artifact_destroy_v1(aa_calibration_artifact *artifact);
 
+/* Stateless experimental diagnostics; immutable response messages, borrowed input.
+ * JSON limits: alignment 1 MiB, planar pose 64 KiB. Existing cancellation rules apply. */
+AA_PUBLIC int32_t aa_alignment_measure_v1(const uint8_t *request, uint64_t request_len,
+    const aa_cancel *cancel, aa_message **out_response);
+AA_PUBLIC int32_t aa_rig_alignment_v1(const uint8_t *request, uint64_t request_len,
+    const aa_cancel *cancel, aa_message **out_response);
+AA_PUBLIC int32_t aa_planar_pose_v1(const uint8_t *request, uint64_t request_len,
+    const aa_cancel *cancel, aa_message **out_response);
+
 #ifdef __cplusplus
 }
 #endif

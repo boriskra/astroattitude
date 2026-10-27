@@ -22,6 +22,7 @@ private func workflowJSON<T: Encodable>(_ value: T) throws -> Any {
         if obj["duration_s"] != nil && obj["midpoint_sigma_s"] == nil { obj["midpoint_sigma_s"] = NSNull() }
         if obj["minimum_inliers"] != nil && obj["maximum_conditional_sigma_rad"] == nil { obj["maximum_conditional_sigma_rad"] = NSNull() }
         if obj["pixel"] != nil && obj["id"] != nil { for key in ["centroid_covariance_px2", "flux"] { if obj[key] == nil { obj[key] = NSNull() } } }
+        if obj["cameras"] != nil && obj["frames"] != nil { for key in ["imu", "down_reference"] { if obj[key] == nil { obj[key] = NSNull() } } }
         if obj["kind"] as? String == "disabled" { obj.removeValue(forKey: "parameters") }
         return obj
     }
@@ -118,4 +119,30 @@ public final class CalibrationSession: @unchecked Sendable {
     public func pause() throws -> CalibrationStage { try call("pause", as:CalibrationStage.self).0 }
     public func resume() throws -> CalibrationStage { try call("resume", as:CalibrationStage.self).0 }
     public func end() throws -> CalibrationStage { try call("end", as:CalibrationStage.self).0 }
+}
+
+/// Experimental camera comparisons and rotation-only calibration from distinct poses.
+public enum Alignment {
+    public static func measure(_ request: AlignmentRequest, cancel: CancellationToken? = nil) throws -> AlignmentReport {
+        try call(request, schema: "astroattitude.alignment/1", target: false, cancel: cancel)
+    }
+    public static func calibrateRig(_ request: RigAlignmentRequest, cancel: CancellationToken? = nil) throws -> AlignmentReport {
+        try call(request, schema: "astroattitude.rig-alignment/1", target: false, rig: true, cancel: cancel)
+    }
+    public static func targetPose(_ request: PlanarPoseRequest, cancel: CancellationToken? = nil) throws -> PlanarPose {
+        try call(request, schema: "astroattitude.planar-pose/1", target: true, cancel: cancel)
+    }
+    private static func call<T: Encodable, U: Decodable>(_ value: T, schema: String, target: Bool, rig: Bool = false, cancel: CancellationToken?) throws -> U {
+        let data = try JSONSerialization.data(withJSONObject: ["schema":schema,"value":try workflowJSON(value)])
+        guard data.count <= 6 * 1048576 else { throw BridgeError.invalidResponse }
+        return try withToken(cancel) { token in
+            var response: OpaquePointer?
+            let status = data.withUnsafeBytes { bytes in
+                let p = bytes.bindMemory(to: UInt8.self).baseAddress
+                if rig { return aa_rig_alignment_v1(p, UInt64(data.count), token, &response) }
+                return target ? aa_planar_pose_v1(p, UInt64(data.count), token, &response) : aa_alignment_measure_v1(p, UInt64(data.count), token, &response)
+            }
+            return try workflowResponse(status, response, as: U.self)
+        }
+    }
 }

@@ -3,6 +3,9 @@ package org.astroattitude
 import kotlinx.serialization.Serializable
 
 @Serializable
+enum class AlignmentStatus { estimated, tilt_only, gravity_reference_unavailable, motion_evidence_unavailable, motion_detected, insufficient_frames, optical_configuration_changed, inconsistent_frames, rotation_estimated, pose_diversity_insufficient, ambiguous_alignment, fit_inconsistent }
+
+@Serializable
 enum class ErrorCode { InvalidInput, InvalidResource, UnsupportedVersion, CalibrationMismatch, OutsideCalibrationDomain, UnsupportedObservation, InsufficientObservations, AstrometryDataUnavailable, NoMatch, AmbiguousMatch, UnobservableGeometry, ResidualLimitExceeded, UncertaintyUnavailable, ConditionalPrecisionNotMet, ResourceLimitExceeded, Cancelled, InternalError }
 
 @Serializable
@@ -474,4 +477,93 @@ data class CalibrationPackage(
     val astrometry_content_id: String,
     val qualification: String,
     val physical_accuracy_qualified: Boolean
+)
+
+@Serializable
+data class AlignmentFrame(
+    val frame_id: String,
+    val camera_id: String,
+    val reference_id: String,
+    val optical_provenance: String,
+    val start_s: Double,
+    val end_s: Double,
+    val R_reference_from_camera: Rotation3,
+    val R_camera_from_accelerometer_nominal: Rotation3
+)
+
+@Serializable
+data class AlignmentImu(
+    val start_s: Double,
+    val end_s: Double,
+    val down_accelerometer: Vec3,
+    val stationary: Boolean
+)
+
+@Serializable
+data class AlignmentRequest(
+    val reference_id: String,
+    val clock_id: String,
+    val cameras: List<String>,
+    val frames: List<AlignmentFrame>,
+    val imu: AlignmentImu?,
+    val down_reference: Vec3?,
+    val minimum_frames: UInt,
+    val motion_detected: Boolean
+)
+
+@Serializable
+data class AlignmentPair(
+    val from_sensor: String,
+    val to_sensor: String,
+    val status: AlignmentStatus,
+    val from_frames: UInt,
+    val to_frames: UInt,
+    val pose_count: UInt,
+    val misalignment_vector_rad: Vec3?,
+    val maximum_gravity_residual_rad: Double?,
+    val geometry_ratio: Double?,
+    val R_to_from: Rotation3?,
+    val rotation_vector_rad: Vec3?,
+    val gravity_mismatch_rad: Double?,
+    val maximum_repeatability_rad: Double?,
+    val limitations: List<String>
+)
+
+@Serializable
+data class RigAlignmentRequest(
+    val poses: List<AlignmentRequest>
+)
+
+@Serializable
+data class AlignmentReport(
+    val pairs: List<AlignmentPair>,
+    val physical_accuracy_qualified: Boolean
+)
+
+@Serializable
+data class TargetCorner(
+    val id: WireUInt64,
+    val target_m: Vec2,
+    val pixel: Vec2
+)
+
+@Serializable
+data class PlanarPoseRequest(
+    val width: UInt,
+    val height: UInt,
+    val fx_px: Double,
+    val fy_px: Double,
+    val cx_px: Double,
+    val cy_px: Double,
+    val corners: List<TargetCorner>,
+    val maximum_rms_px: Double,
+    val ambiguity_tolerance_px: Double
+)
+
+@Serializable
+data class PlanarPose(
+    val R_camera_from_target: Rotation3,
+    val translation_camera_m: Vec3,
+    val rms_px: Double,
+    val corners: UInt
 )

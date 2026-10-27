@@ -10,3 +10,6 @@ __pycache__/
 local.properties
 bindings/swift/Artifacts/
 .kotlin/
+examples/ios-alignment/Adapter/Artifacts/
+*.xcuserstate
+xcuserdata/

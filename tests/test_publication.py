@@ -28,4 +28,16 @@ class Publication(unittest.TestCase):
             inventory={'files':{str(jar.relative_to(r)):{'purpose':'synthetic gate control','binary_sha256':hashlib.sha256(jar.read_bytes()).hexdigest()}},'synthetic_provenance':{'captured_inputs':False}}
             (r/'publication-files.json').write_text(json.dumps(inventory));self.assertEqual(gate.check(r),[])
             jar.write_bytes(b'changed');self.assertTrue(gate.check(r))
+    def test_generated_target_requires_matching_bytes(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as d:
+            r=pathlib.Path(d);subprocess.run(['git','init','-q',str(r)],check=True)
+            target=r/'examples/ios-alignment/target.svg';target.parent.mkdir(parents=True)
+            target.write_text('<svg xmlns="http://www.w3.org/2000/svg"/>')
+            generator=target.parent/'generate_target.py';generator.write_text('# synthetic control\n')
+            name=str(target.relative_to(r));gen=str(generator.relative_to(r))
+            inventory={'files':{name:{'purpose':'generated synthetic target','generator':gen,'generated_sha256':hashlib.sha256(target.read_bytes()).hexdigest()},gen:{'purpose':'synthetic generator'}},'synthetic_provenance':{'captured_inputs':False,'generators':[gen]}}
+            (r/'publication-files.json').write_text(json.dumps(inventory))
+            self.assertEqual(gate.check(r),[])
+            target.write_text('<svg>changed</svg>');self.assertTrue(gate.check(r))
 if __name__=='__main__':unittest.main()

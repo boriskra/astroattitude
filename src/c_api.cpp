@@ -1,6 +1,6 @@
 #include "astroattitude/astroattitude.h"
 #include "internal.hpp"
-#include "workflow_json.hpp"
+#include "alignment_json.hpp"
 #include <charconv>
 using namespace astroattitude;
 struct aa_calibration_session { CalibrationSession session; };
@@ -420,6 +420,60 @@ template <class F> int32_t workflow_call(aa_message **out, F f) {
 }
 } // namespace
 extern "C" {
+int32_t aa_alignment_measure_v1(const uint8_t *p, uint64_t n,
+                                const aa_cancel *cancel, aa_message **out) {
+  if (!p && n) {
+    if (out)
+      *out = nullptr;
+    return 2;
+  }
+  return workflow_call(out, [&] {
+    auto j = parse_json(bytes(p, n), 1048576, 16, 50000);
+    keys(j, {"schema", "value"});
+    workflow_validate(j);
+    require(j.at("schema") == "astroattitude.alignment/1", "Alignment schema",
+            ErrorCode::UnsupportedVersion);
+    workflow_output(out, workflow_value(measure_alignment(
+                             j.at("value").get<AlignmentRequest>(),
+                             {cancel ? &cancel->value : nullptr})));
+  });
+}
+int32_t aa_rig_alignment_v1(const uint8_t *p, uint64_t n,
+                            const aa_cancel *cancel, aa_message **out) {
+  if (!p && n) {
+    if (out)
+      *out = nullptr;
+    return 2;
+  }
+  return workflow_call(out, [&] {
+    auto j = parse_json(bytes(p, n), 6 * 1048576, 20, 300000);
+    keys(j, {"schema", "value"});
+    workflow_validate(j);
+    require(j.at("schema") == "astroattitude.rig-alignment/1",
+            "Rig alignment schema", ErrorCode::UnsupportedVersion);
+    workflow_output(out, workflow_value(calibrate_rig_alignment(
+                             j.at("value").get<RigAlignmentRequest>(),
+                             {cancel ? &cancel->value : nullptr})));
+  });
+}
+int32_t aa_planar_pose_v1(const uint8_t *p, uint64_t n, const aa_cancel *cancel,
+                          aa_message **out) {
+  if (!p && n) {
+    if (out)
+      *out = nullptr;
+    return 2;
+  }
+  return workflow_call(out, [&] {
+    auto j = parse_json(bytes(p, n), 65536, 12, 5000);
+    keys(j, {"schema", "value"});
+    workflow_validate(j);
+    require(j.at("schema") == "astroattitude.planar-pose/1", "Target schema",
+            ErrorCode::UnsupportedVersion);
+    workflow_output(out, workflow_value(solve_planar_target(
+                             j.at("value").get<PlanarPoseRequest>(),
+                             {cancel ? &cancel->value : nullptr})));
+  });
+}
 int32_t aa_extract_v1(const float *pixels, uint64_t count, const uint8_t *mask,
                       uint64_t masks, const uint8_t *metadata, uint64_t length,
                       const aa_cancel *cancel, aa_message **out) {

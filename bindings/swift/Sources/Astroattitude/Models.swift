@@ -1,5 +1,20 @@
 import Foundation
 
+public enum AlignmentStatus: String, Codable, Sendable {
+    case estimated
+    case tilt_only
+    case gravity_reference_unavailable
+    case motion_evidence_unavailable
+    case motion_detected
+    case insufficient_frames
+    case optical_configuration_changed
+    case inconsistent_frames
+    case rotation_estimated
+    case pose_diversity_insufficient
+    case ambiguous_alignment
+    case fit_inconsistent
+}
+
 public enum ErrorCode: String, Codable, Sendable {
     case InvalidInput
     case InvalidResource
@@ -817,5 +832,156 @@ public struct CalibrationPackage: Codable, Sendable {
         self.astrometry_content_id = astrometry_content_id
         self.qualification = qualification
         self.physical_accuracy_qualified = physical_accuracy_qualified
+    }
+}
+
+public struct AlignmentFrame: Codable, Sendable {
+    public var frame_id: String
+    public var camera_id: String
+    public var reference_id: String
+    public var optical_provenance: String
+    public var start_s: Double
+    public var end_s: Double
+    public var R_reference_from_camera: Rotation3
+    public var R_camera_from_accelerometer_nominal: Rotation3
+    public init(frame_id: String, camera_id: String, reference_id: String, optical_provenance: String, start_s: Double, end_s: Double, R_reference_from_camera: Rotation3, R_camera_from_accelerometer_nominal: Rotation3) {
+        self.frame_id = frame_id
+        self.camera_id = camera_id
+        self.reference_id = reference_id
+        self.optical_provenance = optical_provenance
+        self.start_s = start_s
+        self.end_s = end_s
+        self.R_reference_from_camera = R_reference_from_camera
+        self.R_camera_from_accelerometer_nominal = R_camera_from_accelerometer_nominal
+    }
+}
+
+public struct AlignmentImu: Codable, Sendable {
+    public var start_s: Double
+    public var end_s: Double
+    public var down_accelerometer: Vec3
+    public var stationary: Bool
+    public init(start_s: Double, end_s: Double, down_accelerometer: Vec3, stationary: Bool) {
+        self.start_s = start_s
+        self.end_s = end_s
+        self.down_accelerometer = down_accelerometer
+        self.stationary = stationary
+    }
+}
+
+public struct AlignmentRequest: Codable, Sendable {
+    public var reference_id: String
+    public var clock_id: String
+    public var cameras: [String]
+    public var frames: [AlignmentFrame]
+    public var imu: AlignmentImu?
+    public var down_reference: Vec3?
+    public var minimum_frames: UInt32
+    public var motion_detected: Bool
+    public init(reference_id: String, clock_id: String, cameras: [String], frames: [AlignmentFrame], imu: AlignmentImu?, down_reference: Vec3?, minimum_frames: UInt32, motion_detected: Bool) {
+        self.reference_id = reference_id
+        self.clock_id = clock_id
+        self.cameras = cameras
+        self.frames = frames
+        self.imu = imu
+        self.down_reference = down_reference
+        self.minimum_frames = minimum_frames
+        self.motion_detected = motion_detected
+    }
+}
+
+public struct AlignmentPair: Codable, Sendable {
+    public var from_sensor: String
+    public var to_sensor: String
+    public var status: AlignmentStatus
+    public var from_frames: UInt32
+    public var to_frames: UInt32
+    public var pose_count: UInt32
+    public var misalignment_vector_rad: Vec3?
+    public var maximum_gravity_residual_rad: Double?
+    public var geometry_ratio: Double?
+    public var R_to_from: Rotation3?
+    public var rotation_vector_rad: Vec3?
+    public var gravity_mismatch_rad: Double?
+    public var maximum_repeatability_rad: Double?
+    public var limitations: [String]
+    public init(from_sensor: String, to_sensor: String, status: AlignmentStatus, from_frames: UInt32, to_frames: UInt32, pose_count: UInt32, misalignment_vector_rad: Vec3?, maximum_gravity_residual_rad: Double?, geometry_ratio: Double?, R_to_from: Rotation3?, rotation_vector_rad: Vec3?, gravity_mismatch_rad: Double?, maximum_repeatability_rad: Double?, limitations: [String]) {
+        self.from_sensor = from_sensor
+        self.to_sensor = to_sensor
+        self.status = status
+        self.from_frames = from_frames
+        self.to_frames = to_frames
+        self.pose_count = pose_count
+        self.misalignment_vector_rad = misalignment_vector_rad
+        self.maximum_gravity_residual_rad = maximum_gravity_residual_rad
+        self.geometry_ratio = geometry_ratio
+        self.R_to_from = R_to_from
+        self.rotation_vector_rad = rotation_vector_rad
+        self.gravity_mismatch_rad = gravity_mismatch_rad
+        self.maximum_repeatability_rad = maximum_repeatability_rad
+        self.limitations = limitations
+    }
+}
+
+public struct RigAlignmentRequest: Codable, Sendable {
+    public var poses: [AlignmentRequest]
+    public init(poses: [AlignmentRequest]) {
+        self.poses = poses
+    }
+}
+
+public struct AlignmentReport: Codable, Sendable {
+    public var pairs: [AlignmentPair]
+    public var physical_accuracy_qualified: Bool
+    public init(pairs: [AlignmentPair], physical_accuracy_qualified: Bool) {
+        self.pairs = pairs
+        self.physical_accuracy_qualified = physical_accuracy_qualified
+    }
+}
+
+public struct TargetCorner: Codable, Sendable {
+    public var id: WireUInt64
+    public var target_m: Vec2
+    public var pixel: Vec2
+    public init(id: WireUInt64, target_m: Vec2, pixel: Vec2) {
+        self.id = id
+        self.target_m = target_m
+        self.pixel = pixel
+    }
+}
+
+public struct PlanarPoseRequest: Codable, Sendable {
+    public var width: UInt32
+    public var height: UInt32
+    public var fx_px: Double
+    public var fy_px: Double
+    public var cx_px: Double
+    public var cy_px: Double
+    public var corners: [TargetCorner]
+    public var maximum_rms_px: Double
+    public var ambiguity_tolerance_px: Double
+    public init(width: UInt32, height: UInt32, fx_px: Double, fy_px: Double, cx_px: Double, cy_px: Double, corners: [TargetCorner], maximum_rms_px: Double, ambiguity_tolerance_px: Double) {
+        self.width = width
+        self.height = height
+        self.fx_px = fx_px
+        self.fy_px = fy_px
+        self.cx_px = cx_px
+        self.cy_px = cy_px
+        self.corners = corners
+        self.maximum_rms_px = maximum_rms_px
+        self.ambiguity_tolerance_px = ambiguity_tolerance_px
+    }
+}
+
+public struct PlanarPose: Codable, Sendable {
+    public var R_camera_from_target: Rotation3
+    public var translation_camera_m: Vec3
+    public var rms_px: Double
+    public var corners: UInt32
+    public init(R_camera_from_target: Rotation3, translation_camera_m: Vec3, rms_px: Double, corners: UInt32) {
+        self.R_camera_from_target = R_camera_from_target
+        self.translation_camera_m = translation_camera_m
+        self.rms_px = rms_px
+        self.corners = corners
     }
 }

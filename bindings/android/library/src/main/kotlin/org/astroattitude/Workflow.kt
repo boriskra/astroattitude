@@ -84,3 +84,15 @@ class CalibrationSession private constructor(pointer: Long): Closeable {
     fun resume(): CalibrationStage = result("resume")
     fun end(): CalibrationStage = result("end")
 }
+
+/** Fixed-pose measurements; gravity alone never supplies a full IMU rotation. */
+object Alignment {
+    private inline fun <reified T, reified U> call(value: T, schema: String, target: Int, cancel: CancellationToken?): U {
+        val request=buildJsonObject { put("schema",schema); put("value",workflowJson.encodeToJsonElement(value)) }.toString().encodeToByteArray()
+        require(request.size <= 6*1048576)
+        return withToken(cancel) { token -> workflowJson.decodeFromJsonElement(workflowValue(workflowNative { Native.alignment(request,target,token) })) }
+    }
+    fun measure(request: AlignmentRequest, cancel: CancellationToken? = null): AlignmentReport = call(request,"astroattitude.alignment/1",0,cancel)
+    fun calibrateRig(request: RigAlignmentRequest, cancel: CancellationToken? = null): AlignmentReport = call(request,"astroattitude.rig-alignment/1",2,cancel)
+    fun targetPose(request: PlanarPoseRequest, cancel: CancellationToken? = null): PlanarPose = call(request,"astroattitude.planar-pose/1",1,cancel)
+}

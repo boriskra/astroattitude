@@ -1,6 +1,8 @@
 # Multi-camera and inertial fusion
 
-This is application-design guidance, not an implemented multi-camera fusion API.
+The [experimental alignment API](ALIGNMENT.md) implements fixed-pose camera
+comparisons and observable gravity mismatch. Navigation/filter fusion remains
+application-design guidance.
 The library returns timestamped camera orientation. The application owns camera-to-rig
 alignment, clock relationships, motion models and admission into a navigation filter.
 

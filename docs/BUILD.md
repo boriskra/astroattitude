@@ -145,3 +145,9 @@ Android instrumentation uses the same generated fixtures. After the Android buil
 run `:library:connectedDebugAndroidTest` with a dedicated emulator selected via
 `ANDROID_SERIAL`; do not select a physical phone. `tools/verify_android.py` accepts
 the SDK directory and checks both ABIs, AAR contents and APK alignment.
+
+## Experimental alignment example
+
+See [alignment measurements](ALIGNMENT.md) for the additive native API, binding
+entry points and observability limits. The [iOS app](../examples/ios-alignment/README.md)
+includes source-build instructions, a printable target and synthetic simulator tests.

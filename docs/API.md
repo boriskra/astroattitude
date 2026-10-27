@@ -341,3 +341,9 @@ in [C_ABI.md](C_ABI.md), not a duplicate set of public native structs.
 See [native extraction](STAR_EXTRACTION.md), [calibration sessions](CALIBRATION_WORKFLOW.md)
 and the public `extraction.hpp` / `calibration.hpp` headers. Existing solve types
 and behavior remain unchanged. The new workflow remains physically unqualified.
+
+## Experimental alignment example
+
+See [alignment measurements](ALIGNMENT.md) for the additive native API, binding
+entry points and observability limits. The [iOS app](../examples/ios-alignment/README.md)
+includes source-build instructions, a printable target and synthetic simulator tests.

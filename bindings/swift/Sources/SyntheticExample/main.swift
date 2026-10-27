@@ -50,3 +50,29 @@ precondition(report.data.status == "pass" && report.data.candidate_id == expecte
 finished.close(); finished.close()
 do { _ = try finished.progress(); fatalError("Closed workflow accepted") } catch BridgeError.closed {}
 print("Swift native workflow and extraction parity passed; absolute accuracy unqualified")
+let alignmentInput = try JSONDecoder().decode(AlignmentRequest.self,from:data("alignment.json"))
+let alignment = try Alignment.measure(alignmentInput)
+precondition(alignment.pairs[0].status == .tilt_only && alignment.pairs[0].R_to_from == nil)
+precondition(abs(alignment.pairs[1].rotation_vector_rad!.z + 0.1) < 1e-9)
+let planarInput = try JSONDecoder().decode(PlanarPoseRequest.self,from:data("target.json"))
+let planar = try Alignment.targetPose(planarInput)
+precondition(planar.rms_px < 1e-6 && abs(planar.translation_camera_m.z - 0.7) < 1e-7)
+do { _ = try Alignment.measure(alignmentInput,cancel:token); fatalError("Alignment ignored cancellation") } catch BridgeError.resource(let e) { precondition(e.code == .Cancelled) }
+do { _ = try Alignment.targetPose(planarInput,cancel:token); fatalError("Target ignored cancellation") } catch BridgeError.resource(let e) { precondition(e.code == .Cancelled) }
+print("Swift alignment and planar-target parity passed")
+
+for name in ["rig.json","rig-target.json"] {
+    let input=try JSONDecoder().decode(RigAlignmentRequest.self,from:data(name))
+    let full=try Alignment.calibrateRig(input)
+    precondition(full.pairs[0].status == .rotation_estimated)
+    precondition(abs(full.pairs[0].misalignment_vector_rad!.x-0.025)<0.001)
+    do{_ = try Alignment.calibrateRig(input,cancel:token);fatalError("Rig ignored cancellation")}catch BridgeError.resource(let e){precondition(e.code == .Cancelled)}
+}
+print("Swift multi-pose alignment parity passed")
+
+var missingGravity=alignmentInput;missingGravity.down_reference=nil
+let withoutGravity=try Alignment.measure(missingGravity)
+precondition(withoutGravity.pairs[0].status == .gravity_reference_unavailable)
+var missingMotion=alignmentInput;missingMotion.imu=nil
+let withoutMotion=try Alignment.measure(missingMotion)
+precondition(withoutMotion.pairs[0].status == .motion_evidence_unavailable)
